@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Button, ImageBackground, TouchableOpacity, TouchableHighlight } from 'react-native';
 
+import { NativeRouter, Link, Route } from "react-router-native";
 import CharacterCard from "../components/CharacterCard/CharacterCard";
 import firebase from "firebase";
 import { Audio } from 'expo-av';
@@ -60,7 +61,7 @@ export default class DashboardScreen extends Component {
             deal: [],
             // user: firebase.auth().currentUser.displayName,
             isPlaying: false,
-           
+            userId: ""
         };
     }
 
@@ -70,69 +71,81 @@ export default class DashboardScreen extends Component {
 
 
     componentDidMount() {
-      
-        // this.musicToggle();
-       
-        this.setState({ deal:this.state.charactersRound1 });
+        this.setState({ deal: this.state.charactersRound1 });
+
         this.arrayShuffle();
-       
-        // API.getTop()
 
-        //     .then(res => {
+        firebase.auth().onAuthStateChanged((user) => {
+            console.log("checking")
+            console.log(user.uid)
+            console.log(user);
+            if (user) {
+                this.setState({ userId: user.uid });
 
-        //         console.log(res.data[0].score);
-
-        //         this.setState({ topScore:res.data[0].score })
-        //     })
-
-        //     .catch(err => console.log(err));
-
+            }
+        })
 
 
 
+        this.fetchUsers()
 
-        // API.saveName({
-        //     username: firebase.auth().currentUser.displayName,
-        //     score: 0
 
-        // })
-        //     .then(res => this.scores())
-        //     .catch(err => console.log(err));
-        //
-       this.btnplayerclicked()
+        this.btnplayerclicked()
     }
 
 
-    btnplayerclicked = async() => {
-        await Audio.Sound.createAsync(require("../assets/avengsong.mp3"), {shouldPlay:true, isLooping:true } )
+    fetchUsers = async () => {
+        const response = await fetch('https://avengers-memory-game.firebaseio.com/users.json?orderBy="Score"&limitToLast=1&print=pretty'
 
+
+        );
+
+        const resData = await response.json();
+
+        const highScoreinfo = [];
+        for (const key in resData) {
+            highScoreinfo.push(key, resData[key].Score, resData[key].first_name);
+            this.setState({ topScore: resData[key].Score })
         }
 
-        gameOver = async() => {
-            await Audio.Sound.createAsync(require("../assets/gameover.mp3"), {shouldPlay:true} )
-    
-            }
-
-        levelUp1 = async() => {
-            await Audio.Sound.createAsync(require("../assets/levelup.mp3"), {shouldPlay:true } )
-    
-            }
+        console.log(this.state.topScore)
+    }
 
 
-            levelUp2 = async() => {
-                await Audio.Sound.createAsync(require("../assets/levelups.mp3"), {shouldPlay:true} )
-        
-                }
 
-                clickSound = async() => {
-                    await Audio.Sound.createAsync(require("../assets/gameclick.mp3"), {shouldPlay:true} )
-            
-                    }
 
-    
+
+
+    btnplayerclicked = async () => {
+        await Audio.Sound.createAsync(require("../assets/avengsong.mp3"), { shouldPlay: true, isLooping: true })
+
+    }
+
+    gameOver = async () => {
+        await Audio.Sound.createAsync(require("../assets/gameover.mp3"), { shouldPlay: true })
+
+    }
+
+    levelUp1 = async () => {
+        await Audio.Sound.createAsync(require("../assets/levelup.mp3"), { shouldPlay: true })
+
+    }
+
+
+    levelUp2 = async () => {
+        await Audio.Sound.createAsync(require("../assets/levelups.mp3"), { shouldPlay: true })
+
+    }
+
+    clickSound = async () => {
+        await Audio.Sound.createAsync(require("../assets/gameclick.mp3"), { shouldPlay: true })
+
+    }
+
+
 
     arrayShuffle = () => {
-       
+
         let newPos,
             temp;
         let _characters = this.state.deal;
@@ -159,7 +172,7 @@ export default class DashboardScreen extends Component {
         let isadvanced2 = this.state.isadvanced2;
         let deal = this.arrayShuffle();
 
-            this.clickSound();
+        this.clickSound();
         if (clicked.includes(id)) {
             score = 0;
 
@@ -178,7 +191,7 @@ export default class DashboardScreen extends Component {
             message = "😎 You are correct";
             clicked = [...this.state.clicked, id];
 
-            // this.scoreSave(score);
+            this.scoreSave(score);
         }
 
         if (score > topScore) {
@@ -244,7 +257,28 @@ export default class DashboardScreen extends Component {
     //     this.setState({ isPlaying })
     // };
 
-    // scoreSave = (_score) => {
+    scoreSave = async (_score) => {
+
+        const response = await fetch(`https://avengers-memory-game.firebaseio.com/users/${this.state.userId}.json`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                Score: _score
+            })
+        }
+        )
+        const resData = await response.json();
+    }
+
+
+
+
+
+
+
 
     //     API.saveScore(
 
@@ -260,7 +294,11 @@ export default class DashboardScreen extends Component {
     //         .catch(err => console.log(err));
     // };
 
-
+    //  scoreSave=(uid, _score)=> {
+    //         firebase.database().ref('/users/' + uid).set({
+    //           Score: _score
+    //         });
+    //       }
 
 
 
@@ -317,18 +355,29 @@ export default class DashboardScreen extends Component {
 
             <View style={styles.bigWrap}>
 
-                <View style={styles.headContainer}>
-                    
 
+
+
+                <View style={styles.headContainer}>
+
+                <View>
+        <Link
+          to={`/Scores`}
+         
+        >
+          <Text style={styles.score}>Rendering with React</Text>
+        </Link>
+</View>
 
                     <Text style={styles.score}> Score:{this.state.score} || TopScore:{this.state.topScore}</Text>
-                    <Button title="SIGN OUT"   onPress={() => firebase.auth().signOut()} />
+                    <Button title="SIGN OUT" onPress={() => firebase.auth().signOut()} />
+
                 </View>
                 <View>
                     <Text style={styles.message}>{this.state.message}</Text>
                 </View>
 
-                <View  style={styles.Container}>
+                <View style={styles.Container}>
                     {deal}
                 </View>
 
@@ -366,7 +415,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-     
+
         flexDirection: 'row',
         flexWrap: 'wrap',
 
@@ -381,11 +430,11 @@ const styles = StyleSheet.create({
 
         marginTop: "5.5%",
     },
-    message:{
-        color:"white"
+    message: {
+        color: "white"
     },
-    score:{
-        color:"red",
+    score: {
+        color: "red",
         fontSize: 20,
     }
 

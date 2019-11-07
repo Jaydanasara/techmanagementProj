@@ -7,7 +7,7 @@ import DashboardScreen from "./Screens/DashboardScreen";
 import Header from "./components/Header";
 import firebase from "firebase";
 import { firebaseConfig } from './config';
-
+import Scores from "./Screens/Scores";
 firebase.initializeApp(firebaseConfig)
 
 
@@ -59,6 +59,7 @@ class App extends Component {
       <Route exact path = "/" render={()=> this.state.user ? (<DashboardScreen/>) :(<LoginScreen/>)}/>
       <Route exact path = "/LogingScreen" component ={LoginScreen}/>
       <Route exact path = "/Dashboard" component ={DashboardScreen}/>
+      <Route exact path = "/Scores" component ={Scores}/>
      </Switch>
      
 

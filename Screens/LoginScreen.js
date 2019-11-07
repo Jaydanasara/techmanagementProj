@@ -36,7 +36,7 @@ export default class LoginScreen extends Component {
         // Sign in with credential from the Google user.
         firebase.auth().signInAndRetrieveDataWithCredential(credential)
         .then(function(result){
-          console.log (result);
+          console.log (firebaseUser);
           console.log("user signed in ");
           firebase
           .database()
@@ -46,10 +46,11 @@ export default class LoginScreen extends Component {
               profile_picture: result.additionalUserInfo.profile.picture,
               locale: result.additionalUserInfo.profile.locale,
               first_name: result.additionalUserInfo.profile.given_name,
-              last_name: result.additionalUserInfo.profile.family_name
+              last_name: result.additionalUserInfo.profile.family_name,
+              Score:51
             })
           .then(function(snapshot){
-            console.log ("snapshot",snapshot)
+            
           })
         }) 
         .catch(function(error) {
