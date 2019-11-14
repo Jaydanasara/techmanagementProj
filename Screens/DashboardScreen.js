@@ -77,7 +77,7 @@ export default class DashboardScreen extends Component {
 
         firebase.auth().onAuthStateChanged((user) => {
             console.log("checking")
-            console.log(user.uid)
+         
             console.log(user);
             if (user) {
                 this.setState({ userId: user.uid });
@@ -117,7 +117,7 @@ export default class DashboardScreen extends Component {
 
 
     btnplayerclicked = async () => {
-        await Audio.Sound.createAsync(require("../assets/avengsong.mp3"), { shouldPlay: true, isLooping: true })
+        await Audio.Sound.createAsync(require("../assets/avengsong.mp3"), { shouldPlay: true, isLooping: false })
 
     }
 
@@ -365,7 +365,7 @@ export default class DashboardScreen extends Component {
           to={`/Scores`}
          
         >
-          <Text style={styles.score}>Rendering with React</Text>
+          <Text style={styles.viewScore}>View Scores</Text>
         </Link>
 </View>
 
@@ -436,7 +436,15 @@ const styles = StyleSheet.create({
     score: {
         color: "red",
         fontSize: 20,
-    }
+    },
 
+
+
+viewScore: {
+        fontSize:20,
+        color:"blue",
+        textDecorationLine: "underline"
+
+    },
 
 });

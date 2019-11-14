@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from "firebase";
-import { Image, Text, Button, View, StyleSheet} from "react-native";
+import { Image, Text, Button, View, StyleSheet,ImageBackground} from "react-native";
 import {Link} from "react-router-native";
 // let scoreSong = new Audio("./scoreSong.mp3");
 
@@ -93,25 +93,22 @@ class Scores extends Component {
 
         return (
             <View style= {styles.scoreWrapper}>
-            
-                   
+           
                     <View style={styles.highContainer}>
                         <Image style={styles.high} source={require("./Images/highScores.gif")} />
                     </View>
 
                     <View style={styles.buttonLink}>
                     <Link to = {"/DashBoard"}><Text style={styles.hyplink} >Return to Game</Text></Link>
-                        <Button title="SIGN OUT" onPress={() => firebase.auth().signOut()} />
-                        
+                    
+                     <Button title="SIGN OUT" onPress={() => firebase.auth().signOut()}  />
+                    
                     </View>
 
-                    <View>
-
-                        <Image style={styles.spider}  source={require("./Images/spider.jpg")} />   
-
-                    </View>
+                  
                 
                 <View>
+                <ImageBackground source={require("./Images/spider.jpg")} style={styles.spider} >
 
                     <View style={styles.scroll}>
 
@@ -135,7 +132,10 @@ class Scores extends Component {
 
 
                     </View>
+                    </ImageBackground>
                 </View>
+              
+                   
             </View>
         );
     }
@@ -185,6 +185,10 @@ buttonLink:{
 },
 scroll:{
     alignItems:"center"
+},
+spider:{  height:"100%",
+width:"100%",
+
 }
 
 
