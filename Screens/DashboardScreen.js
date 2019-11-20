@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, ImageBackground, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableHighlight,} from 'react-native';
 
 import { NativeRouter, Link, Route } from "react-router-native";
 import CharacterCard from "../components/CharacterCard/CharacterCard";
@@ -360,14 +360,13 @@ export default class DashboardScreen extends Component {
 
                 <View style={styles.headContainer}>
 
-                <View>
-        <Link
-          to={`/Scores`}
-         
-        >
+            <View>
+            <TouchableHighlight  onPress={()=>this.props.navigation.navigate('Scores')} >
+        
           <Text style={styles.viewScore}>View Scores</Text>
-        </Link>
-</View>
+         </TouchableHighlight>
+       </View>
+
 
                     <Text style={styles.score}> Score:{this.state.score} || TopScore:{this.state.topScore}</Text>
                     <Button title="SIGN OUT" onPress={() => firebase.auth().signOut()} />

@@ -5,30 +5,30 @@ import firebase from "firebase"
 
 export default class LoadingScreen extends Component {
 
-//   componentDidMount(){
-//     this.checkIfLoggedIn();
-//   }
-//  checkIfLoggedIn=()=>{
-//    firebase.auth().onAuthStateChanged(function(user)
-//    {
-//       if (user)
-//       {
-//         this.props.navigation.navigate
-//         ("DashboardScreen");
+  componentDidMount(){
+    this.checkIfLoggedIn();
+  }
+ checkIfLoggedIn=()=>{
+   firebase.auth().onAuthStateChanged(function(user)
+   {
+      if (user)
+      {
+        this.props.navigation.navigate
+        ("DashboardScreen");
 
-//       }else{
-//         this.props.navigation.navigate("LoginScreen");
-//       }
-//    }.bind(this)
-//    );
-//  }
+      }else{
+        this.props.navigation.navigate("LoginScreen");
+      }
+   }.bind(this)
+   );
+ }
 
 
   render() {
     return (
       <View style= {styles.container}>
        
-        <Text>Loading Now</Text>
+        <ActivityIndicator size="large"/>
 
       </View>
     );

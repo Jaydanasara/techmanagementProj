@@ -7,6 +7,7 @@ import DashboardScreen from "./Screens/DashboardScreen";
 import Header from "./components/Header";
 import firebase from "firebase";
 import { firebaseConfig } from './config';
+import {createAppContainer,createSwitchNavigator} from "react-navigation"
 import Scores from "./Screens/Scores";
 firebase.initializeApp(firebaseConfig)
 
@@ -23,22 +24,22 @@ class App extends Component {
 
 
   componentDidMount(){
-    this.checkIfLoggedIn();
+    // this.checkIfLoggedIn();
   }
   
-  checkIfLoggedIn() {
-    firebase.auth().onAuthStateChanged((user) => {
-      console.log(user);
-      if (user) {
-        this.setState({ user });
+  // checkIfLoggedIn() {
+  //   firebase.auth().onAuthStateChanged((user) => {
+  //     console.log(user);
+  //     if (user) {
+  //       this.setState({ user });
 
-      } else {
-        this.setState({ user: null });
+  //     } else {
+  //       this.setState({ user: null });
 
-      }
-    });
+  //     }
+  //   });
 
-  }
+  // }
 
 
 
@@ -50,7 +51,10 @@ class App extends Component {
   render(){
      return(
       <ImageBackground source={require("./assets/logo.png")} style={styles.container} >
-        {/* <Header/> */}
+
+        <AppNavigator/>
+
+        {/* <Header/>
      <NativeRouter>
       
         <View style= {styles.screenContainer}>
@@ -66,7 +70,7 @@ class App extends Component {
       </View>
       
      
-      </NativeRouter>
+      </NativeRouter> */}
       </ImageBackground>
      );
 
@@ -76,10 +80,15 @@ class App extends Component {
   
 }
 
+const AppSwitchNavigator = createSwitchNavigator({
+  LoadingScreen: LoadingScreen,
+LoginScreen:LoginScreen,
+  DashboardScreen:DashboardScreen,
+  Scores:Scores
 
+})
 
-
-
+const AppNavigator = createAppContainer(AppSwitchNavigator)
 
 
 const styles = StyleSheet.create({

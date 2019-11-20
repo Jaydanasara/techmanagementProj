@@ -47,7 +47,7 @@ export default class LoginScreen extends Component {
               locale: result.additionalUserInfo.profile.locale,
               first_name: result.additionalUserInfo.profile.given_name,
               last_name: result.additionalUserInfo.profile.family_name,
-              Score:51
+              
             })
           .then(function(snapshot){
             

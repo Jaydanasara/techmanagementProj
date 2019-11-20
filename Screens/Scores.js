@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from "firebase";
-import { Image, Text, Button, View, StyleSheet,ImageBackground} from "react-native";
+import { Image, Text, Button, View, StyleSheet,ImageBackground, TouchableHighlight} from "react-native";
 import {Link} from "react-router-native";
 // let scoreSong = new Audio("./scoreSong.mp3");
 
@@ -99,7 +99,10 @@ class Scores extends Component {
                     </View>
 
                     <View style={styles.buttonLink}>
-                    <Link to = {"/DashBoard"}><Text style={styles.hyplink} >Return to Game</Text></Link>
+                    <TouchableHighlight  onPress={()=>this.props.navigation.navigate('DashboardScreen')} >
+
+                    <Text style={styles.hyplink} >Return to Game</Text>
+                    </TouchableHighlight>
                     
                      <Button title="SIGN OUT" onPress={() => firebase.auth().signOut()}  />
                     
